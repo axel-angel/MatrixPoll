@@ -1,0 +1,32 @@
+div.block {
+    padding: 10px;
+    margin: 30px;
+}
+
+input.nickname {
+    height: 100%;
+}
+
+select.cells {
+    overflow: hidden;
+}
+
+#allAnswers {
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+#allAnswers td.nickname {
+    width: 250px;
+}
+
+#allAnswers th {
+    padding: 10px;
+    color: #333;
+    border-bottom: 1px solid #aaa;
+}
+
+#allAnswers td {
+    padding: 10px;
+    border-bottom: 1px dashed #ddd;
+}

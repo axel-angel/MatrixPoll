@@ -8,7 +8,7 @@
     <li>
       <label>
         _{MsgGiveTitle}
-      <input type=text name=title placeholder="_{MsgTitle}" .form-control>
+      <input type=text name=title placeholder="_{MsgTitle}" required .form-control>
 
       <label>
         _{MsgGiveOptionalDesc}
@@ -18,7 +18,7 @@
     <li>
       <label>
         _{MsgChooseColumns}
-      <input type=text name=columns placeholder="_{MsgColumnEx1}" .form-control>
+      <input type=text name=columns placeholder="_{MsgColumnEx1}" required .form-control>
       <input type=text name=columns placeholder="_{MsgColumnEx2}" .form-control>
       <input type=text name=columns placeholder="_{MsgColumnEx3}" .form-control>
       <button type=button onclick="add_column();" .btn .btn-default>
@@ -27,7 +27,7 @@
     <li>
       <label>
         _{MsgChooseAvailAnsw}
-      <input type=text name=values placeholder="_{MsgYes}" .form-control>
+      <input type=text name=values placeholder="_{MsgYes}" required .form-control>
       <input type=text name=values placeholder="_{MsgNo}" .form-control>
       <input type=text name=values placeholder="_{MsgMaybe}" .form-control>
       <button type=button onclick="add_value();" .btn .btn-default>

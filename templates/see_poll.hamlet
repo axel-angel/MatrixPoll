@@ -1,0 +1,32 @@
+<h1>#{pollTitle poll}
+
+<form method=POST .col-lg-12>
+  $maybe desc <- pollDesc poll
+    <div .block>
+      <label>
+        _{MsgReadDesc}
+      <div .desc>
+        #{desc}
+
+  <div .block>
+    <label>
+      _{MsgFillThePoll}
+    <table #allAnswers>
+      <thead>
+        <tr>
+          <th>&nbsp;
+          $forall col <- pollColumns poll
+            <th>#{col}
+          <th>&nbsp;
+      <tbody>
+        <tr>
+          <td .nickname>
+            <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control>
+          $forall column <- pollColumns poll
+            <td .cells>
+              <select name="#{column}" .form-control size="#{show $ length $ pollAnswers poll}" .cells>
+                $forall answer <- pollAnswers poll
+                  <option value="#{answer}">#{answer}
+          <td .save>
+            <button type=submit .btn .btn-primary .btn-lg>
+              _{MsgSave}
