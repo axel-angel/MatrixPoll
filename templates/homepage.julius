@@ -1,0 +1,15 @@
+function add_el($target) {
+  var $el = $target.clone();
+  $el.attr('placeholder', '').val('');
+  $target.after($el);
+}
+
+function add_column() {
+  var $target = $('input[name="columns"]:last');
+  add_el($target);
+}
+
+function add_value() {
+  var $target = $('input[name="values"]:last');
+  add_el($target);
+}
