@@ -1,38 +1,38 @@
-<h1>Matrix Poll
+<h1>_{MsgTheTitle}
 
 <p>
-  Create your custom poll easily!
+  _{MsgTheSubtitle}
 
 <form method=POST .col-lg-12>
   <ol .poll-steps .col-lg-4>
     <li>
       <label>
-        Give it a title
-      <input type=text name=title placeholder="Title" .form-control>
+        _{MsgGiveTitle}
+      <input type=text name=title placeholder="_{MsgTitle}" .form-control>
 
       <label>
-        An optional description
-      <textarea name=desc placeholder="Describe the poll" rows=10 .form-control>
+        _{MsgGiveOptionalDesc}
+      <textarea name=desc placeholder="_{MsgGiveDesc}" rows=10 .form-control>
 
   <ol start=2 .poll-steps .col-lg-4>
     <li>
       <label>
-        Choose your columns
-      <input type=text name=columns placeholder="1st of January" .form-control>
-      <input type=text name=columns placeholder="2nd of January" .form-control>
-      <input type=text name=columns placeholder="3rd of January" .form-control>
-      <button type=button .btn .btn-default>
-        Add one column
+        _{MsgChooseColumns}
+      <input type=text name=columns placeholder="_{MsgColumnEx1}" .form-control>
+      <input type=text name=columns placeholder="_{MsgColumnEx2}" .form-control>
+      <input type=text name=columns placeholder="_{MsgColumnEx3}" .form-control>
+      <button type=button onclick="add_column();" .btn .btn-default>
+        _{MsgAddOneColumn}
 
     <li>
       <label>
-        Choose the column values
-      <input type=text name=values placeholder=Yes .form-control>
-      <input type=text name=values placeholder=No .form-control>
-      <input type=text name=values placeholder=Maybe .form-control>
-      <button type=button .btn .btn-default>
-        Add one column value
+        _{MsgChooseAvailAnsw}
+      <input type=text name=values placeholder="_{MsgYes}" .form-control>
+      <input type=text name=values placeholder="_{MsgNo}" .form-control>
+      <input type=text name=values placeholder="_{MsgMaybe}" .form-control>
+      <button type=button onclick="add_value();" .btn .btn-default>
+        _{MsgAddOneAnswer}
 
   <div .poll-steps .col-lg-4>
     <button type=submit .btn .btn-primary>
-      Create the poll
+      _{MsgCreatePoll}
