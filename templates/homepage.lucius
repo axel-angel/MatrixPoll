@@ -1,6 +1,7 @@
-h1 {
-    text-align: center
+ol.poll-steps > li {
+  padding: 0px 10px 0px 10px;
 }
-h2##{aDomId} {
-    color: #990
+
+ol.poll-steps label {
+  margin: 30px 5px 5px 5px;
 }
