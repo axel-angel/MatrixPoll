@@ -18,7 +18,10 @@ Maybe: Maybe
 AddOneAnswer: Add one column value
 CreatePoll: Create the poll
 FieldRequireNonEmpty: This field is not allowed to be empty
-FillThePoll: Please fill in the poll
+FillThePoll: Please add yourself below in the poll
 YourName: Your name
 Save: Save
 YouCreated title@Text: Your new poll "#{title}" is now online!
+Total: Total
+PeopleN x@Int: #{show x} people
+None: None

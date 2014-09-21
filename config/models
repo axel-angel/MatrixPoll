@@ -19,6 +19,7 @@ Poll
     date Day
 
 Result
+    poll PollId
     nickname Text
     answers [Text]
     date Day

@@ -3,8 +3,8 @@ div.block {
     margin: 30px;
 }
 
-input.nickname {
-    height: 100%;
+td.nickname {
+    font-weight: bold;
 }
 
 select.cells {
@@ -29,4 +29,14 @@ select.cells {
 #allAnswers td {
     padding: 10px;
     border-bottom: 1px dashed #ddd;
+}
+
+tr#total > td {
+  padding-top: 15px;
+  border-bottom: none;
+  border-top: 1px solid #222;
+}
+
+tr#total .bold {
+  font-weight: bold;
 }

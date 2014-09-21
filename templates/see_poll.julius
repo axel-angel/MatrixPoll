@@ -1,0 +1,33 @@
+function add_result(button) {
+    var $button = $(button);
+    var $table = $('#allAnswers > tbody');
+    var $form = $('#allAnswersForm');
+    var $parent = $button.closest('tr');
+    var data = $form.serialize();
+    console.log(['data', data, $button, $table]);
+
+    $.post('@{AjaxResultR}', data, function (reply) {
+        console.log(['reply', reply]);
+        if (reply.success) {
+            $form[0].reset();
+
+            var $tr = $('<tr/>');
+            $tr.append($('<td/>', {
+                'class': 'nickname',
+                'text': reply.nickname,
+            }));
+            for (var i = 0; i < reply.values.length; ++i) {
+                $tr.append($('<td/>', {
+                    'class': 'cells',
+                    'text': reply.values[i],
+                }));
+            }
+            $tr.append($('<td/>'));
+            console.log(['$tr', $tr, $tr.children()]);
+            $tr.insertBefore($parent);
+        }
+        else {
+            console.log("An error occured! The operation wasn't saved.");
+        }
+    });
+}

@@ -1,6 +1,6 @@
 <h1>#{pollTitle poll}
 
-<form method=POST .col-lg-12>
+<form #allAnswersForm method=POST .col-lg-12>
   $maybe desc <- pollDesc poll
     <div .block>
       <label>
@@ -11,6 +11,7 @@
   <div .block>
     <label>
       _{MsgFillThePoll}
+    <input type=hidden name=pid value="#{toPathPiece pid}">
     <table #allAnswers>
       <thead>
         <tr>
@@ -19,14 +20,38 @@
             <th>#{col}
           <th>&nbsp;
       <tbody>
+        $forall Entity _ result <- results
+          <tr>
+            <td .nickname>
+              #{resultNickname result}
+            $forall answer <- resultAnswers result
+              <td .cells>
+                #{answer}
+            <td>
+              &nbsp;
+
         <tr>
           <td .nickname>
             <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control>
-          $forall column <- pollColumns poll
+          $forall _ <- pollColumns poll
             <td .cells>
-              <select name="#{column}" .form-control size="#{show $ length $ pollAnswers poll}" .cells>
+              <select name="values" .form-control size="#{show $ length $ pollAnswers poll}" .cells>
                 $forall answer <- pollAnswers poll
                   <option value="#{answer}">#{answer}
           <td .save>
-            <button type=submit .btn .btn-primary .btn-lg>
+            <button type=button onclick="add_result(this);" .btn .btn-primary .btn-lg>
               _{MsgSave}
+
+        <tr #total>
+          <td>
+            <span .bold>_{MsgTotal}
+            (_{MsgPeopleN $ length results})
+          $forall mBest <- bests
+            <td>
+              $maybe (best, count) <- mBest
+                <span .bold>#{best}
+                (#{show count})
+              $nothing
+                <span>_{MsgNone}
+          <td>
+            &nbsp;
