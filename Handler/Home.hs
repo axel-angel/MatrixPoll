@@ -86,7 +86,7 @@ getNow = getCurrentTime >>= return . utctDay
 
 
 mostFrequent :: (Eq a, Ord a) => [a] -> Maybe (a, Int)
-mostFrequent = safeHead . reverse . sortWith (\(v,c) -> c) . countOccurences
+mostFrequent = safeHead . reverse . sortWith (\(_,c) -> c) . countOccurences
     where safeHead (x:_) = Just x
           safeHead _ = Nothing
 
