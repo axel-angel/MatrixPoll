@@ -15,7 +15,7 @@ ChooseAvailAnsw: Choose the available answers
 Yes: Yes
 No: No
 Maybe: Maybe
-AddOneAnswer: Add one column value
+AddOneAnswer: Add one answer
 CreatePoll: Create the poll
 FieldRequireNonEmpty: This field is not allowed to be empty
 FillThePoll: Please add yourself below in the poll
