@@ -40,3 +40,7 @@ tr#total > td {
 tr#total .bold {
   font-weight: bold;
 }
+
+.auto-size {
+    width: auto;
+}

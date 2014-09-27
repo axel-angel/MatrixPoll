@@ -1,6 +1,6 @@
 <h1>#{pollTitle poll}
 
-<form #allAnswersForm method=POST .col-lg-12>
+<form #allAnswersForm method=POST>
   $maybe desc <- pollDesc poll
     <div .block>
       <label>
@@ -32,10 +32,10 @@
 
         <tr>
           <td .nickname>
-            <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control>
+            <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control .auto-size>
           $forall _ <- pollColumns poll
             <td .cells>
-              <select name="values" .form-control size="#{show $ length $ pollAnswers poll}" .cells>
+              <select name="values" size="#{show $ length $ pollAnswers poll}" .cells .form-control .auto-size>
                 $forall answer <- pollAnswers poll
                   <option value="#{answer}">#{answer}
           <td .save>
