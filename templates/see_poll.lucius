@@ -1,3 +1,7 @@
+label.desc {
+    font-size: 1.2em;
+}
+
 div.block {
     padding: 10px;
     margin: 30px;
@@ -5,6 +9,8 @@ div.block {
 
 td.nickname {
     font-weight: bold;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
 }
 
 select.cells {
@@ -31,10 +37,14 @@ select.cells {
     border-bottom: 1px dashed #ddd;
 }
 
+#allAnswers tr.answer:hover {
+    background-color: #f5f5f5;
+}
+
 tr#total > td {
   padding-top: 15px;
   border-bottom: none;
-  border-top: 1px solid #222;
+  border-top: 1px solid #aaa;
 }
 
 tr#total .bold {

@@ -3,13 +3,13 @@
 <form #allAnswersForm method=POST>
   $maybe desc <- pollDesc poll
     <div .block>
-      <label>
+      <label .desc>
         _{MsgReadDesc}
       <div .desc>
         #{desc}
 
   <div .block>
-    <label>
+    <label .desc>
       _{MsgFillThePoll}
     <input type=hidden name=pid value="#{toPathPiece pid}">
     <table #allAnswers>
@@ -21,7 +21,7 @@
           <th>&nbsp;
       <tbody>
         $forall Entity _ result <- results
-          <tr>
+          <tr .answer>
             <td .nickname>
               #{resultNickname result}
             $forall answer <- resultAnswers result
@@ -30,7 +30,7 @@
             <td>
               &nbsp;
 
-        <tr>
+        <tr .answer .mine>
           <td .nickname>
             <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control .auto-size>
           $forall _ <- pollColumns poll

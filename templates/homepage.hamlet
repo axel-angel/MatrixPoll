@@ -6,17 +6,17 @@
 <form method=POST .col-lg-12>
   <ol .poll-steps .col-lg-4>
     <li>
-      <label>
+      <label .desc>
         _{MsgGiveTitle}
       <input type=text name=title placeholder="_{MsgTitle}" required .form-control>
 
-      <label>
+      <label .desc>
         _{MsgGiveOptionalDesc}
       <textarea name=desc placeholder="_{MsgGiveDesc}" rows=10 .form-control>
 
   <ol start=2 .poll-steps .col-lg-4>
     <li>
-      <label>
+      <label .desc>
         _{MsgChooseColumns}
       <input type=text name=columns placeholder="_{MsgColumnEx1}" required .form-control>
       <input type=text name=columns placeholder="_{MsgColumnEx2}" .form-control>
@@ -25,7 +25,7 @@
         _{MsgAddOneColumn}
 
     <li>
-      <label>
+      <label .desc>
         _{MsgChooseAvailAnsw}
       <input type=text name=values placeholder="_{MsgYes}" required .form-control>
       <input type=text name=values placeholder="_{MsgNo}" .form-control>
