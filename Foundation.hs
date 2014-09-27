@@ -4,7 +4,7 @@ import Prelude
 import Yesod
 import Yesod.Static
 import Yesod.Auth
-import Yesod.Auth.BrowserId
+import Yesod.Auth.Token
 import Yesod.Default.Config
 import Yesod.Default.Util (addStaticContentExternal)
 import Network.HTTP.Client.Conduit (Manager, HasHttpManager (getHttpManager))
@@ -19,6 +19,7 @@ import Text.Jasmine (minifym)
 import Text.Hamlet (hamletFile)
 import Yesod.Core.Types (Logger)
 import Data.Text (Text)
+import Control.Applicative ((<$>))
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -64,6 +65,7 @@ instance Yesod App where
     defaultLayout widget = do
         master <- getYesod
         mmsg <- getMessage
+        mUserId <- maybeAuthId
 
         -- We break up the default layout into two components:
         -- default-layout is the contents of the body tag, and
@@ -119,6 +121,16 @@ instance YesodPersist App where
 instance YesodPersistRunner App where
     getDBRunner = defaultGetDBRunner connPool
 
+instance YesodAuthToken App where
+    type AuthTokenId App = UserId
+
+    setUserToken uid t = do
+        runDB $ updateWhere [UserId ==. uid] [UserToken =. t]
+
+    getTokenCreds t = do
+        mUser <- runDB . getBy $ UniqueToken t
+        return $ (\uid -> TokenCreds (entityKey uid) t) <$> mUser
+
 instance YesodAuth App where
     type AuthId App = UserId
 
@@ -127,18 +139,12 @@ instance YesodAuth App where
     -- Where to send a user after logout
     logoutDest _ = HomeR
 
-    getAuthId creds = runDB $ do
-        x <- getBy $ UniqueUser $ credsIdent creds
-        case x of
-            Just (Entity uid _) -> return $ Just uid
-            Nothing -> do
-                fmap Just $ insert User
-                    { userIdent = credsIdent creds
-                    , userPassword = Nothing
-                    }
+    getAuthId (Creds "token" t _) = do
+        mTokenCreds <- getTokenCreds t
+        return $ tokenCredsAuthId <$> mTokenCreds
 
     -- You can add other plugins like BrowserID, email or OAuth here
-    authPlugins _ = [authBrowserId def]
+    authPlugins _ = [authToken]
 
     authHttpManager = httpManager
 
