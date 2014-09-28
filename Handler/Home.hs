@@ -39,15 +39,32 @@ postAjaxResultR = do
         FormSuccess (pid, nickname, values) -> do
             now <- liftIO getNow
             rid <- runDB . insert $ Result pid Nothing nickname values now
+            (uid, token) <- getsertUser nickname
+            setCreds False $ tokenCreds token
             return . toTypedContent . object $
-                [ "success" .= True
-                , "pid" .= pid
-                , "rid" .= rid
-                , "nickname" .= nickname
-                , "values" .= values
+                [ "success"   .= True
+                , "pid"       .= pid
+                , "rid"       .= rid
+                , "nickname"  .= nickname
+                , "values"    .= values
+                , "uid"       .= uid
+                , "token"     .= token
                 ]
         _ ->
             return . toTypedContent . object $ [ "success" .= False ]
+
+
+getsertUser :: Text -> Handler (UserId, Token)
+getsertUser nickname = do
+    mUser <- maybeAuth
+    case mUser of
+         Just (Entity uid u) ->
+             return (uid, userToken u)
+         Nothing -> do
+             master <- getYesod
+             token <- liftIO $ randomToken master
+             uid <- runDB . insert $ User token nickname
+             return (uid, token)
 
 
 pollForm :: FormInput Handler (Text, Maybe Text, [Text], [Text])

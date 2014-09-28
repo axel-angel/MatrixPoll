@@ -1,8 +1,6 @@
 User
-    ident Text
-    nickname Text Maybe
     token Text
-      UniqueUser ident
+    nickname Text
       UniqueToken token
       deriving Typeable
 
