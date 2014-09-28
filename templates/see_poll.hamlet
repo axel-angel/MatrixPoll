@@ -1,5 +1,8 @@
 <h1>#{pollTitle poll}
 
+<script>
+  var url_add_result = "@{AjaxResultR pid}";
+
 <form #allAnswersForm method=POST>
   $maybe desc <- pollDesc poll
     <div .block>
@@ -30,14 +33,7 @@
               &nbsp;
 
         <tr .answer .new>
-          <td .nickname>
-            <input type=hidden name=pid value="#{toPathPiece pid}">
-            <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control .auto-size>
-          $forall _ <- pollColumns poll
-            <td .cells>
-              <select name="values" size="#{show $ length $ pollAnswers poll}" .cells .form-control .auto-size>
-                $forall answer <- pollAnswers poll
-                  <option value="#{answer}">#{answer}
+          ^{newRowForm}
           <td .save>
             <button type=button onclick="add_result(this);" .btn .btn-primary .btn-lg>
               _{MsgSave}

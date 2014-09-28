@@ -17,6 +17,9 @@ import           Settings.StaticFiles as Import
 
 import Yesod.Auth        as Import (setCreds, maybeAuth, maybeAuthId)
 import Yesod.Auth.Token  as Import (randomToken, tokenCreds, Token)
+import Control.Arrow     as Import ((&&&), (***))
+import Control.Monad     as Import (forM)
+import Data.Traversable  as Import (sequenceA)
 
 #if __GLASGOW_HASKELL__ >= 704
 import           Data.Monoid          as Import

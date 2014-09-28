@@ -32,14 +32,16 @@ getSeePollR pid = do
     let answers = transpose $ map (resultAnswers . entityVal) results
         bests = map mostFrequent answers
         isRowMine p = maybe False (resultOwner p ==) mUserId
+    (newRowForm, _) <- generateFormPost $ rowForm $ Entity pid poll
     defaultLayout $(widgetFile "see_poll")
 
 
-postAjaxResultR :: Handler TypedContent
-postAjaxResultR = do
-    res <- runInputPostResult rowForm
+postAjaxResultR :: PollId -> Handler TypedContent
+postAjaxResultR pid = do
+    poll <- runDB $ get404 pid
+    ((res, _), _) <- runFormPost $ rowForm $ Entity pid poll
     case res of
-        FormSuccess (pid, nickname, values) -> do
+        FormSuccess (nickname, values) -> do
             now <- liftIO getNow
             (uid, token) <- getsertUser (Just nickname)
             rid <- runDB . insert $ Result pid uid nickname values now
@@ -76,17 +78,38 @@ pollForm = (\x y z u -> (x, y, z, u))
     <*> ireq multiNonEmptyField "values"
 
 
-rowForm :: FormInput Handler (PollId, Text, [Text])
-rowForm = (\x y z -> (x, y, z))
-    <$> ireq (selectField pollKeyField) "pid"
-    <*> ireq textField "nickname"
-    <*> ireq multiNonEmptyField "values"
+rowForm :: Entity Poll -> Html -> MForm Handler (FormResult (Text, [Text]), Widget)
+rowForm (Entity pid poll) extra = do
+    mr <- getMessageRender
 
+    (_, pidView) <- mreq hiddenField "" (Just pid)
 
-pollKeyField :: Handler (OptionList (Key Poll))
-pollKeyField = optionsPersistKey noFilter [] (const msg)
-    where msg = toMessage ("" :: Text)
-          noFilter = []::[Filter Poll]
+    let nikFset = fieldSettingsAttrs $
+            [ ("class", "nickname form-control auto-size")
+            , ("placeholder", mr $ SomeMessage MsgYourName) ]
+    (nikRes, nikView) <- mreq textField nikFset Nothing
+
+    let selectSize = length $ pollColumns poll
+        answers = pollAnswers poll
+        ansFset = fieldSettingsAttrs $
+            [ ("size", textShow selectSize)
+            , ("class", "cells form-control auto-size") ]
+    (ansRess, ansViews) <- fmap unzip $ forM (pollColumns poll) $ \_ ->
+        mreq (selectFieldList $ map (id &&& id) answers) ansFset Nothing
+
+    let res = (,) <$> nikRes <*> sequenceA ansRess
+
+    let widget = [whamlet|
+      <td .nickname>
+        #{extra}
+        ^{fvInput pidView}
+        ^{fvInput nikView}
+      $forall v <- ansViews
+        <td .cells>
+          ^{fvInput v}
+    |]
+
+    return (res, widget)
 
 
 multiNonEmptyField :: Field Handler [Text]
@@ -111,3 +134,7 @@ mostFrequent = safeHead . reverse . sortWith (\(_,c) -> c) . countOccurences
 
 countOccurences :: (Eq a, Ord a) => [a] -> [(a, Int)]
 countOccurences = map (\xs@(x:_) -> (x, length xs)) . group . sort
+
+fieldSettingsAttrs :: [(Text, Text)] -> FieldSettings site
+fieldSettingsAttrs attrs = (fieldSettingsLabel emptyLabel) { fsAttrs = attrs }
+    where emptyLabel = "" :: Text

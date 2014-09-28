@@ -1,4 +1,4 @@
-function add_result(button) {
+function add_result(button) { // url_add_result (global)
     var $button = $(button);
     var $table = $('#allAnswers > tbody');
     var $form = $('#allAnswersForm');
@@ -8,7 +8,7 @@ function add_result(button) {
 
     $.ajax({
         type: 'POST',
-        url: '@{AjaxResultR}',
+        url: url_add_result,
         data: data,
         success: function (reply) {
             $inputs.val('');
