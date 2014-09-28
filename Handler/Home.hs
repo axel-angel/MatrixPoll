@@ -39,8 +39,8 @@ postAjaxResultR = do
     case res of
         FormSuccess (pid, nickname, values) -> do
             now <- liftIO getNow
-            rid <- runDB . insert $ Result pid Nothing nickname values now
             (uid, token) <- getsertUser (Just nickname)
+            rid <- runDB . insert $ Result pid uid nickname values now
             return . toTypedContent . object $
                 [ "success"   .= True
                 , "pid"       .= pid

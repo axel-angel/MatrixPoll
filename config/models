@@ -20,7 +20,7 @@ Poll
 
 Result
     poll PollId
-    owner UserId Maybe
+    owner UserId
     nickname Text
     answers [Text]
     date Day
