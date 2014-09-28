@@ -18,7 +18,8 @@ postHomeR = do
     (title, desc, cols, vals) <- runInputPost pollForm
     liftIO $ print (title, desc, cols, vals)
     now <- liftIO getNow
-    pid <- runDB . insert $ Poll Nothing title desc cols vals now
+    (uid, _) <- getsertUser Nothing
+    pid <- runDB . insert $ Poll uid title desc cols vals now
     setMessageI $ MsgYouCreated title
     redirect $ SeePollR pid
 
@@ -39,8 +40,7 @@ postAjaxResultR = do
         FormSuccess (pid, nickname, values) -> do
             now <- liftIO getNow
             rid <- runDB . insert $ Result pid Nothing nickname values now
-            (uid, token) <- getsertUser nickname
-            setCreds False $ tokenCreds token
+            (uid, token) <- getsertUser (Just nickname)
             return . toTypedContent . object $
                 [ "success"   .= True
                 , "pid"       .= pid
@@ -54,16 +54,16 @@ postAjaxResultR = do
             return . toTypedContent . object $ [ "success" .= False ]
 
 
-getsertUser :: Text -> Handler (UserId, Token)
-getsertUser nickname = do
+getsertUser :: Maybe Text -> Handler (UserId, Token)
+getsertUser mNickname = do
     mUser <- maybeAuth
     case mUser of
          Just (Entity uid u) ->
              return (uid, userToken u)
          Nothing -> do
-             master <- getYesod
-             token <- liftIO $ randomToken master
-             uid <- runDB . insert $ User token nickname
+             token <- getYesod >>= liftIO . randomToken
+             uid <- runDB . insert $ User token mNickname
+             setCreds False $ tokenCreds token
              return (uid, token)
 
 

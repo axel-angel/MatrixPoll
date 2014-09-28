@@ -1,6 +1,6 @@
 User
     token Text
-    nickname Text
+    nickname Text Maybe
       UniqueToken token
       deriving Typeable
 
@@ -11,7 +11,7 @@ Email
       UniqueEmail email
 
 Poll
-    owner User Maybe
+    owner UserId
     title Text
     desc Text Maybe
     columns [Text]
