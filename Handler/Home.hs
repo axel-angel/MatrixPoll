@@ -115,7 +115,7 @@ rowForm (Entity pid poll) mResult extra = do
             , ("placeholder", mr $ SomeMessage MsgYourName) ]
     (nikRes, nikView) <- mreq textField nikFset (resultNickname <$> mResult)
 
-    let selectSize = length $ pollColumns poll
+    let selectSize = length $ pollAnswers poll
         answers = pollAnswers poll
         ansFset = fieldSettingsAttrs $
             [ ("size", textShow selectSize)
