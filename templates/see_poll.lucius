@@ -58,3 +58,8 @@ tr#total .bold {
 .auto-size {
     width: auto;
 }
+
+div.done-flashing {
+    text-align: center;
+    margin: 0px auto;
+}

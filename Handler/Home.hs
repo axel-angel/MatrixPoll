@@ -40,8 +40,8 @@ getSeePollR pid = do
     defaultLayout $(widgetFile "see_poll")
 
 
-postAjaxResultR :: PollId -> Handler TypedContent
-postAjaxResultR pid = do
+postAjaxAddR :: PollId -> Handler TypedContent
+postAjaxAddR pid = do
     poll <- runDB $ get404 pid
     ((res, _), _) <- runFormPost $ rowForm (Entity pid poll) Nothing
     case res of
@@ -57,6 +57,28 @@ postAjaxResultR pid = do
                 , "uid"       .= uid
                 , "token"     .= token
                 ]
+        _ ->
+            invalidArgs ["Form probably incomplete"]
+
+
+postAjaxUpdateR :: PollId -> ResultId -> Handler TypedContent
+postAjaxUpdateR pid rid = do
+    uid <- requireAuthId
+    poll <- runDB $ get404 pid
+    result <- runDB $ get404 rid
+
+    when (resultOwner result /= uid) $ do
+        invalidArgs ["You don't own this row"]
+
+    ((res, _), _) <- runFormPost $ rowForm (Entity pid poll) Nothing
+    case res of
+        FormSuccess (nickname, values) -> do
+            now <- liftIO getNow
+            let result' = result { resultNickname = nickname
+                                 , resultAnswers = values
+                                 , resultDate = now }
+            runDB $ replace rid result'
+            return . toTypedContent . object $ [ ]
         _ ->
             invalidArgs ["Form probably incomplete"]
 

@@ -35,3 +35,28 @@ function add_result(button) { // url_add_result (global)
         },
     });
 }
+
+function update_result(button, rid) { // AjaxUpdateR, pid (global)
+    var $button = $(button);
+    var $parent = $button.closest('tr');
+    var $inputs = $parent.find(':input');
+    var data = $inputs.serialize();
+
+    $.ajax({
+        type: 'POST',
+        url: AjaxUpdateR(pid, rid),
+        data: data,
+        success: function (reply) {
+            var $span = $('<div/>', {
+                'class': 'done-flashing',
+                'text': 'Done!',
+            });
+            $span.insertAfter($button);
+            $span.fadeOut(4000);
+        },
+        error: function (xhr, txt, err) {
+            var text = $(xhr.responseText).text();
+            window.alert(err +": Someone has probably already replied under this nickname.\n\n"+ text);
+        },
+    });
+}

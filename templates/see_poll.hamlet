@@ -1,7 +1,9 @@
 <h1>#{pollTitle poll}
 
 <script>
-  var url_add_result = "@{AjaxResultR pid}";
+  var url_add_result = "@{AjaxAddR pid}";
+  var pid = #{toPathPiece pid};
+  var AjaxUpdateR = function (pid, rid) { return '/ajax/update/'+pid+'/'+rid };
 
 <form #allAnswersForm method=POST>
   $maybe desc <- pollDesc poll
@@ -22,12 +24,12 @@
             <th>#{col}
           <th>&nbsp;
       <tbody>
-        $forall (Entity _ result, fWid) <- zip results forms
+        $forall (Entity rid result, fWid) <- zip results forms
           $if isRowMine result
-            <tr .answer mine>
+            <tr .answer .mine>
               ^{fWid}
-              <td .add>
-                <button type=button onclick="update_result(this);" .btn .btn-primary .btn-lg>
+              <td .save>
+                <button type=button onclick="update_result(this, #{toPathPiece rid});" .btn .btn-primary .btn-lg>
                   _{MsgSave}
           $else
             <tr .answer>
