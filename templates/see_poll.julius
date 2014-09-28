@@ -3,14 +3,15 @@ function add_result(button) {
     var $table = $('#allAnswers > tbody');
     var $form = $('#allAnswersForm');
     var $parent = $button.closest('tr');
-    var data = $form.serialize();
+    var $inputs = $parent.find(':input');
+    var data = $inputs.serialize();
 
     $.ajax({
         type: 'POST',
         url: '@{AjaxResultR}',
         data: data,
         success: function (reply) {
-            $form[0].reset();
+            $inputs.val('');
 
             var $tr = $('<tr/>', {
                 'class': 'answer mine',

@@ -11,7 +11,6 @@
   <div .block>
     <label .desc>
       _{MsgFillThePoll}
-    <input type=hidden name=pid value="#{toPathPiece pid}">
     <table #allAnswers>
       <thead>
         <tr>
@@ -32,6 +31,7 @@
 
         <tr .answer .new>
           <td .nickname>
+            <input type=hidden name=pid value="#{toPathPiece pid}">
             <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control .auto-size>
           $forall _ <- pollColumns poll
             <td .cells>
