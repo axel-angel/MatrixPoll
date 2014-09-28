@@ -21,7 +21,7 @@
           <th>&nbsp;
       <tbody>
         $forall Entity _ result <- results
-          <tr .answer>
+          <tr .answer :isRowMine result:.mine>
             <td .nickname>
               #{resultNickname result}
             $forall answer <- resultAnswers result
@@ -30,7 +30,7 @@
             <td>
               &nbsp;
 
-        <tr .answer .mine>
+        <tr .answer .new>
           <td .nickname>
             <input type=text name=nickname placeholder="_{MsgYourName}" .nickname .form-control .auto-size>
           $forall _ <- pollColumns poll

@@ -26,10 +26,12 @@ postHomeR = do
 
 getSeePollR :: PollId -> Handler Html
 getSeePollR pid = do
+    mUserId <- maybeAuthId
     poll <- runDB $ get404 pid
     results <- runDB $ selectList [ResultPoll ==. pid] [Asc ResultNickname]
     let answers = transpose $ map (resultAnswers . entityVal) results
-    let bests = map mostFrequent answers
+        bests = map mostFrequent answers
+        isRowMine p = maybe False (resultOwner p ==) mUserId
     defaultLayout $(widgetFile "see_poll")
 
 

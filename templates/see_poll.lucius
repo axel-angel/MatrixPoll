@@ -41,6 +41,10 @@ select.cells {
     background-color: #f5f5f5;
 }
 
+#allAnswers tr.answer.mine > .nickname {
+    background-color: rgb(212, 231, 255);
+}
+
 tr#total > td {
   padding-top: 15px;
   border-bottom: none;

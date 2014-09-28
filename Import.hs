@@ -15,7 +15,7 @@ import           Settings             as Import
 import           Settings.Development as Import
 import           Settings.StaticFiles as Import
 
-import Yesod.Auth        as Import (setCreds, maybeAuth)
+import Yesod.Auth        as Import (setCreds, maybeAuth, maybeAuthId)
 import Yesod.Auth.Token  as Import (randomToken, tokenCreds, Token)
 
 #if __GLASGOW_HASKELL__ >= 704
