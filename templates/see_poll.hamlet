@@ -22,21 +22,28 @@
             <th>#{col}
           <th>&nbsp;
       <tbody>
-        $forall Entity _ result <- results
-          <tr .answer :isRowMine result:.mine>
-            <td .nickname>
-              #{resultNickname result}
-            $forall answer <- resultAnswers result
-              <td .cells>
-                #{answer}
-            <td>
-              &nbsp;
+        $forall (Entity _ result, fWid) <- zip results forms
+          $if isRowMine result
+            <tr .answer mine>
+              ^{fWid}
+              <td .add>
+                <button type=button onclick="update_result(this);" .btn .btn-primary .btn-lg>
+                  _{MsgSave}
+          $else
+            <tr .answer>
+              <td .nickname>
+                #{resultNickname result}
+              $forall answer <- resultAnswers result
+                <td .cells>
+                  #{answer}
+              <td>
+                &nbsp;
 
         <tr .answer .new>
           ^{newRowForm}
-          <td .save>
+          <td .add>
             <button type=button onclick="add_result(this);" .btn .btn-primary .btn-lg>
-              _{MsgSave}
+              _{MsgAdd}
 
         <tr #total>
           <td>

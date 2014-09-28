@@ -20,6 +20,7 @@ CreatePoll: Create the poll
 FieldRequireNonEmpty: This field is not allowed to be empty
 FillThePoll: Please add yourself below in the poll
 YourName: Your name
+Add: Add
 Save: Save
 YouCreated title@Text: Your new poll "#{title}" is now online!
 Total: Total

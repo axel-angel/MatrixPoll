@@ -6,6 +6,8 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (Day)
 import Data.List (sort, group, transpose)
 import GHC.Exts (sortWith)
+import Safe (atMay)
+import Control.Monad (join)
 
 
 getHomeR :: Handler Html
@@ -29,17 +31,19 @@ getSeePollR pid = do
     mUserId <- maybeAuthId
     poll <- runDB $ get404 pid
     results <- runDB $ selectList [ResultPoll ==. pid] [Asc ResultNickname]
+    forms <- forM results $ \(Entity _ r) ->
+        fmap fst $ generateFormPost $ rowForm (Entity pid poll) (Just r)
     let answers = transpose $ map (resultAnswers . entityVal) results
         bests = map mostFrequent answers
         isRowMine p = maybe False (resultOwner p ==) mUserId
-    (newRowForm, _) <- generateFormPost $ rowForm $ Entity pid poll
+    (newRowForm, _) <- generateFormPost $ rowForm (Entity pid poll) Nothing
     defaultLayout $(widgetFile "see_poll")
 
 
 postAjaxResultR :: PollId -> Handler TypedContent
 postAjaxResultR pid = do
     poll <- runDB $ get404 pid
-    ((res, _), _) <- runFormPost $ rowForm $ Entity pid poll
+    ((res, _), _) <- runFormPost $ rowForm (Entity pid poll) Nothing
     case res of
         FormSuccess (nickname, values) -> do
             now <- liftIO getNow
@@ -78,8 +82,8 @@ pollForm = (\x y z u -> (x, y, z, u))
     <*> ireq multiNonEmptyField "values"
 
 
-rowForm :: Entity Poll -> Html -> MForm Handler (FormResult (Text, [Text]), Widget)
-rowForm (Entity pid poll) extra = do
+rowForm :: Entity Poll -> Maybe Result -> Html -> MForm Handler (FormResult (Text, [Text]), Widget)
+rowForm (Entity pid poll) mResult extra = do
     mr <- getMessageRender
 
     (_, pidView) <- mreq hiddenField "" (Just pid)
@@ -87,15 +91,17 @@ rowForm (Entity pid poll) extra = do
     let nikFset = fieldSettingsAttrs $
             [ ("class", "nickname form-control auto-size")
             , ("placeholder", mr $ SomeMessage MsgYourName) ]
-    (nikRes, nikView) <- mreq textField nikFset Nothing
+    (nikRes, nikView) <- mreq textField nikFset (resultNickname <$> mResult)
 
     let selectSize = length $ pollColumns poll
         answers = pollAnswers poll
         ansFset = fieldSettingsAttrs $
             [ ("size", textShow selectSize)
             , ("class", "cells form-control auto-size") ]
-    (ansRess, ansViews) <- fmap unzip $ forM (pollColumns poll) $ \_ ->
-        mreq (selectFieldList $ map (id &&& id) answers) ansFset Nothing
+        mAnsAt i = join $ flip atMay i . resultAnswers <$> mResult
+        columnCount = length $ pollColumns poll
+    (ansRess, ansViews) <- fmap unzip $ forM [0..columnCount-1] $ \i ->
+        mreq (selectFieldList $ map (id &&& id) answers) ansFset (mAnsAt i)
 
     let res = (,) <$> nikRes <*> sequenceA ansRess
 
