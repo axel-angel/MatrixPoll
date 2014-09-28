@@ -42,8 +42,7 @@ postAjaxResultR = do
             (uid, token) <- getsertUser (Just nickname)
             rid <- runDB . insert $ Result pid uid nickname values now
             return . toTypedContent . object $
-                [ "success"   .= True
-                , "pid"       .= pid
+                [ "pid"       .= pid
                 , "rid"       .= rid
                 , "nickname"  .= nickname
                 , "values"    .= values
@@ -51,7 +50,7 @@ postAjaxResultR = do
                 , "token"     .= token
                 ]
         _ ->
-            return . toTypedContent . object $ [ "success" .= False ]
+            invalidArgs ["Form probably incomplete"]
 
 
 getsertUser :: Maybe Text -> Handler (UserId, Token)

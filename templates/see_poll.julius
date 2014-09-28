@@ -4,14 +4,17 @@ function add_result(button) {
     var $form = $('#allAnswersForm');
     var $parent = $button.closest('tr');
     var data = $form.serialize();
-    console.log(['data', data, $button, $table]);
 
-    $.post('@{AjaxResultR}', data, function (reply) {
-        console.log(['reply', reply]);
-        if (reply.success) {
+    $.ajax({
+        type: 'POST',
+        url: '@{AjaxResultR}',
+        data: data,
+        success: function (reply) {
             $form[0].reset();
 
-            var $tr = $('<tr/>');
+            var $tr = $('<tr/>', {
+                'class': 'answer mine',
+            });
             $tr.append($('<td/>', {
                 'class': 'nickname',
                 'text': reply.nickname,
@@ -23,11 +26,11 @@ function add_result(button) {
                 }));
             }
             $tr.append($('<td/>'));
-            console.log(['$tr', $tr, $tr.children()]);
             $tr.insertBefore($parent);
-        }
-        else {
-            console.log("An error occured! The operation wasn't saved.");
-        }
+        },
+        error: function (xhr, txt, err) {
+            var text = $(xhr.responseText).text();
+            window.alert(err +": Someone has probably already replied under this nickname.\n\n"+ text);
+        },
     });
 }
