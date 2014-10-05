@@ -28,6 +28,8 @@ function add_result(button) { // url_add_result (global)
             }
             $tr.append($('<td/>'));
             $tr.insertBefore($parent);
+            // FIXME: we should be logged now, we need to reload the page!
+            window.location.replace(document.URL);
         },
         error: function (xhr, txt, err) {
             var text = $(xhr.responseText).text();
