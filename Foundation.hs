@@ -5,6 +5,7 @@ import Yesod
 import Yesod.Static
 import Yesod.Auth
 import Yesod.Auth.Token
+import Yesod.Auth.OpenId
 import Yesod.Default.Config
 import Yesod.Default.Util (addStaticContentExternal)
 import Network.HTTP.Client.Conduit (Manager, HasHttpManager (getHttpManager))
@@ -143,8 +144,15 @@ instance YesodAuth App where
         mTokenCreds <- getTokenCreds t
         return $ tokenCredsAuthId <$> mTokenCreds
 
+    getAuthId (Creds "openid" t _) = do
+        mUser <- runDB . getBy $ UniqueToken t
+        let _ = mUser :: Maybe (Entity User)
+        Just <$> case mUser of
+             Just (Entity uid _) -> return uid
+             Nothing -> runDB $ insert $ User t Nothing
+
     -- You can add other plugins like BrowserID, email or OAuth here
-    authPlugins _ = [authToken]
+    authPlugins _ = [authToken, authOpenId Claimed []]
 
     authHttpManager = httpManager
 
