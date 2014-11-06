@@ -1,6 +1,24 @@
+$(function () {
+    var $target = $('input.auto-dispear');
+    setAutoDispear($target);
+});
+
+function setAutoDispear($els) {
+    $els.on('blur', function () {
+        var $this = $(this);
+        if ($.trim($this.val()) == "") {
+            $this.remove();
+        }
+    });
+};
+
+
 function add_el($target) {
   var $el = $target.clone();
-  $el.attr('placeholder', '').val('');
+  $el.attr('placeholder', '')
+    .val('')
+    .removeAttr('required');
+  setAutoDispear($el);
   $target.after($el);
 }
 

@@ -19,8 +19,8 @@
       <label .desc>
         _{MsgChooseColumns}
       <input type=text name=columns placeholder="_{MsgColumnEx1}" required .form-control>
-      <input type=text name=columns placeholder="_{MsgColumnEx2}" .form-control>
-      <input type=text name=columns placeholder="_{MsgColumnEx3}" .form-control>
+      <input type=text name=columns placeholder="_{MsgColumnEx2}" .auto-dispear .form-control>
+      <input type=text name=columns placeholder="_{MsgColumnEx3}" .auto-dispear .form-control>
       <button type=button onclick="add_column();" .btn .btn-default>
         _{MsgAddOneColumn}
 
@@ -28,8 +28,8 @@
       <label .desc>
         _{MsgChooseAvailAnsw}
       <input type=text name=values placeholder="_{MsgYes}" required .form-control>
-      <input type=text name=values placeholder="_{MsgNo}" .form-control>
-      <input type=text name=values placeholder="_{MsgMaybe}" .form-control>
+      <input type=text name=values placeholder="_{MsgNo}" .auto-dispear .form-control>
+      <input type=text name=values placeholder="_{MsgMaybe}" .auto-dispear .form-control>
       <button type=button onclick="add_value();" .btn .btn-default>
         _{MsgAddOneAnswer}
 
