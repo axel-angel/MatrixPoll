@@ -53,9 +53,9 @@
             (_{MsgPeopleN $ length results})
           $forall mBest <- bests
             <td>
-              $maybe (best, count) <- mBest
+              $maybe (best, cnt) <- mBest
                 <span .bold>#{best}
-                (#{show count})
+                (#{show cnt})
               $nothing
                 <span>_{MsgNone}
           <td>
