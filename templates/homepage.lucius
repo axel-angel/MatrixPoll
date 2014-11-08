@@ -9,3 +9,13 @@ ol.poll-steps > li {
 ol.poll-steps label {
   margin: 30px 5px 5px 5px;
 }
+
+table.columns ,
+table.answers {
+  width: 100%;
+}
+
+table.columns td.input ,
+table.answers td.input {
+  width: 100%;
+}

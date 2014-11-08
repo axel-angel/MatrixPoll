@@ -1,33 +1,41 @@
 $(function () {
     var $target = $('input.auto-dispear');
-    setAutoDispear($target);
 });
-
-function setAutoDispear($els) {
-    $els.on('blur', function () {
-        var $this = $(this);
-        if ($.trim($this.val()) == "") {
-            $this.remove();
-        }
-    });
-};
 
 
 function add_el($target) {
   var $el = $target.clone();
-  $el.attr('placeholder', '')
+  $el.find('input')
+    .attr('placeholder', '')
     .val('')
     .removeAttr('required');
-  setAutoDispear($el);
   $target.after($el);
 }
 
 function add_column() {
-  var $target = $('input[name="columns"]:last');
+  var $target = $('tr.column:last');
   add_el($target);
 }
 
 function add_value() {
-  var $target = $('input[name="values"]:last');
+  var $target = $('tr.answer:last');
   add_el($target);
+}
+
+function row_delete(el) {
+  var $parent = $(el).closest('tr');
+  $parent.remove();
+}
+
+function row_move(el, dir) {
+  var $parent = $(el).closest('tr');
+
+  if (dir > 0) {
+    var $next = $parent.next();
+    if ($next) $parent.insertAfter($next);
+  }
+  if (dir < 0) {
+    var $prev = $parent.prev();
+    if ($prev) $parent.insertBefore($prev);
+  }
 }

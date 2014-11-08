@@ -18,18 +18,44 @@
     <li>
       <label .desc>
         _{MsgChooseColumns}
-      <input type=text name=columns placeholder="_{MsgColumnEx1}" required .form-control>
-      <input type=text name=columns placeholder="_{MsgColumnEx2}" .auto-dispear .form-control>
-      <input type=text name=columns placeholder="_{MsgColumnEx3}" .auto-dispear .form-control>
+      <table .columns>
+        $forall msg <- [MsgColumnEx1, MsgColumnEx2, MsgColumnEx3]
+          <tr .column>
+            <td .input>
+              <input type=text name=columns placeholder="_{msg}" required .form-control>
+            <td .empty>
+              &nbsp;
+            <td .action>
+              <button type=button onclick="row_move(this, -1);".action-up .btn .btn-default>
+                ▲
+            <td .action>
+              <button type=button onclick="row_move(this, +1);" .action-dw .btn .btn-default>
+                ▼
+            <td .action>
+              <button type=button onclick="row_delete(this);" .action-del .btn .btn-default>
+                ✖
       <button type=button onclick="add_column();" .btn .btn-default>
         _{MsgAddOneColumn}
 
     <li>
       <label .desc>
         _{MsgChooseAvailAnsw}
-      <input type=text name=values placeholder="_{MsgYes}" required .form-control>
-      <input type=text name=values placeholder="_{MsgNo}" .auto-dispear .form-control>
-      <input type=text name=values placeholder="_{MsgMaybe}" .auto-dispear .form-control>
+      <table .answers>
+        $forall msg <- [MsgYes, MsgNo, MsgMaybe]
+          <tr .answer>
+            <td .input>
+              <input type=text name=values placeholder="_{msg}" required .form-control>
+            <td .empty>
+              &nbsp;
+            <td .button>
+              <button type=button onclick="row_move(this, -1);".action-up .btn .btn-default>
+                ▲
+            <td .button>
+              <button type=button onclick="row_move(this, +1);" .action-dw .btn .btn-default>
+                ▼
+            <td .button>
+              <button type=button onclick="row_delete(this);" .action-del .btn .btn-default>
+                ✖
       <button type=button onclick="add_value();" .btn .btn-default>
         _{MsgAddOneAnswer}
 
