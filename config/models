@@ -11,12 +11,14 @@ Email
       UniqueEmail email
 
 Poll
+    hash Text
     owner UserId
     title Text
     desc Text Maybe
     columns [Text]
     answers [Text]
     date Day
+      UniquePoll hash
 
 Result
     poll PollId

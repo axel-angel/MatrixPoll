@@ -5,6 +5,6 @@
 /robots.txt RobotsR GET
 
 / HomeR GET POST
-/poll/#PollId SeePollR GET
+/poll/#Text SeePollR GET
 /ajax/add/#PollId AjaxAddR POST
 /ajax/update/#PollId/#ResultId AjaxUpdateR POST

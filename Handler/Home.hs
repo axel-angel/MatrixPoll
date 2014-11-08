@@ -8,6 +8,8 @@ import Data.List (sort, group, transpose)
 import GHC.Exts (sortWith)
 import Safe (atMay)
 import Control.Monad (join)
+import System.Random (randomRIO)
+import Data.Text (pack)
 
 
 getHomeR :: Handler Html
@@ -21,15 +23,16 @@ postHomeR = do
     liftIO $ print (title, desc, cols, vals)
     now <- liftIO getNow
     (uid, _) <- getsertUser Nothing
-    pid <- runDB . insert $ Poll uid title desc cols vals now
+    phash <- mkPollHash
+    _pid <- runDB . insert $ Poll phash uid title desc cols vals now
     setMessageI $ MsgYouCreated title
-    redirect $ SeePollR pid
+    redirect $ SeePollR phash
 
 
-getSeePollR :: PollId -> Handler Html
-getSeePollR pid = do
+getSeePollR :: Text -> Handler Html
+getSeePollR phash = do
     mUserId <- maybeAuthId
-    poll <- runDB $ get404 pid
+    Entity pid poll <- runDB $ getBy404 $ UniquePoll phash
     results <- runDB $ selectList [ResultPoll ==. pid] [Asc ResultNickname]
     forms <- forM results $ \(Entity _ r) ->
         fmap fst $ generateFormPost $ rowForm (Entity pid poll) (Just r)
@@ -166,3 +169,26 @@ countOccurences = map (\xs@(x:_) -> (x, length xs)) . group . sort
 fieldSettingsAttrs :: [(Text, Text)] -> FieldSettings site
 fieldSettingsAttrs attrs = (fieldSettingsLabel emptyLabel) { fsAttrs = attrs }
     where emptyLabel = "" :: Text
+
+
+pollHashLen :: Int
+pollHashLen = 4
+
+pollChars :: [Char]
+pollChars = ['a'..'z'] ++ ['A'..'Z'] ++ ['0'..'9']
+
+pickElem :: [a] -> IO a
+pickElem xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
+
+mkPollHash :: Handler Text
+mkPollHash = do
+    suf <- liftIO $ forM [1 .. pollHashLen-1] $ const $ pickElem pollChars
+    pack <$> appendCheck suf
+    where
+        appendCheck :: [Char] -> Handler [Char]
+        appendCheck suffix = do
+            hash' <- (: suffix) <$> (liftIO $ pickElem pollChars)
+            mPoll <- runDB . getBy $ UniquePoll (pack hash')
+            case mPoll of
+                 Nothing -> return hash'
+                 Just _ -> appendCheck hash'

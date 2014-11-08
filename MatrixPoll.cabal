@@ -70,6 +70,7 @@ library
                  , time                          >= 1.4
                  , yesod-auth-token              >= 0.1
                  , safe                          >= 0.3
+                 , random                        >= 1.0.1
 
     -- see https://github.com/yesodweb/yesod/issues/814
     if !os(windows)
