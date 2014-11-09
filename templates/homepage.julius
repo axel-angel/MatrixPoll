@@ -5,11 +5,13 @@ $(function () {
 
 function add_el($target) {
   var $el = $target.clone();
-  $el.find('input')
+  var $input = $el.find('input');
+  $input
     .attr('placeholder', '')
     .val('')
     .removeAttr('required');
   $target.after($el);
+  $input.focus();
 }
 
 function add_column() {
