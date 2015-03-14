@@ -44,7 +44,7 @@
         $forall msg <- [MsgYes, MsgNo, MsgMaybe]
           <tr .answer>
             <td .input>
-              <input type=text name=values placeholder="_{msg}" required .form-control>
+              <input type=text name=values placeholder="_{msg}" .form-control>
             <td .empty>
               &nbsp;
             <td .button>

@@ -19,8 +19,8 @@ getHomeR = do
 
 postHomeR :: Handler Html
 postHomeR = do
-    (title, desc, cols, vals) <- runInputPost pollForm
-    liftIO $ print (title, desc, cols, vals)
+    (title, desc, cols, vals') <- runInputPost pollForm
+    let vals = if null vals' then ["Yes", "No", "Maybe"] else vals'
     now <- liftIO getNow
     (uid, _) <- getsertUser Nothing
     phash <- mkPollHash
@@ -104,7 +104,7 @@ pollForm = (\x y z u -> (x, y, z, u))
     <$> ireq textField "title"
     <*> iopt textField "desc"
     <*> ireq multiNonEmptyField "columns"
-    <*> ireq multiNonEmptyField "values"
+    <*> ireq multiField "values"
 
 
 rowForm :: Entity Poll -> Maybe Result -> Html -> MForm Handler (FormResult (Text, [Text]), Widget)
