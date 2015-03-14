@@ -16,6 +16,36 @@ getHomeR :: Handler Html
 getHomeR = do
     defaultLayout $(widgetFile "homepage")
 
+getMyPollsR :: Handler Html
+getMyPollsR = do
+    uid <- requireAuthId
+    ps_o <- runDB $ selectList [PollOwner ==. uid] [Desc PollDate]
+    psid_a <- map (resultPoll . entityVal) <$> (runDB $ selectList [ResultOwner ==. uid] [])
+    ps_a <- runDB $ selectList [PollId <-. psid_a] [Desc PollDate]
+
+    defaultLayout $ [whamlet|
+        <h1>
+            My polls
+
+        <h2>
+          Poll I answered:
+
+        <ul>
+          $forall Entity pid p <- ps_a
+            <li>
+              <a href=@{SeePollR $ pollHash p}>#{pollTitle p}
+              (#{show $ pollDate p})
+
+        <h2>
+          Poll I created:
+
+        <ul>
+          $forall Entity pid p <- ps_o
+            <li>
+              <a href=@{SeePollR $ pollHash p}>#{pollTitle p}
+              (#{show $ pollDate p})
+    |]
+
 
 postHomeR :: Handler Html
 postHomeR = do

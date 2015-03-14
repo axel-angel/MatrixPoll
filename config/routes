@@ -6,5 +6,6 @@
 
 / HomeR GET POST
 /poll/#Text SeePollR GET
+/my MyPollsR GET
 /ajax/add/#PollId AjaxAddR POST
 /ajax/update/#PollId/#ResultId AjaxUpdateR POST

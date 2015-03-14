@@ -16,6 +16,8 @@ $newline never
         <ul .list-inline>
           $maybe _uid <- mUserId
             <li>
+              <a href=@{MyPollsR} .btn .btn-default>My polls
+            <li>
               <a href=@{AuthR LogoutR} .btn .btn-default>Logout
           $nothing
             <li>
