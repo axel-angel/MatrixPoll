@@ -31,7 +31,7 @@ getMyPollsR = do
           Poll I answered:
 
         <ul>
-          $forall Entity pid p <- ps_a
+          $forall Entity _ p <- ps_a
             <li>
               <a href=@{SeePollR $ pollHash p}>#{pollTitle p}
               (#{show $ pollDate p})
@@ -40,7 +40,7 @@ getMyPollsR = do
           Poll I created:
 
         <ul>
-          $forall Entity pid p <- ps_o
+          $forall Entity _ p <- ps_o
             <li>
               <a href=@{SeePollR $ pollHash p}>#{pollTitle p}
               (#{show $ pollDate p})
