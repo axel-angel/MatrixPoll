@@ -70,7 +70,9 @@ getSeePollR phash = do
         bests = map mostFrequent answers
         isRowMine p = maybe False (resultOwner p ==) mUserId
     (newRowForm, _) <- generateFormPost $ rowForm (Entity pid poll) Nothing
-    defaultLayout $(widgetFile "see_poll")
+    defaultLayout $ do
+        setTitle $ pollTitle poll
+        $(widgetFile "see_poll")
 
 
 postAjaxAddR :: PollId -> Handler TypedContent
