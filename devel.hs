@@ -3,10 +3,9 @@
 import "MatrixPoll" Application (getApplicationDev)
 import Network.Wai.Handler.Warp
     (runSettings, defaultSettings, setPort)
-import Control.Concurrent (forkIO)
+import Control.Concurrent (forkIO, threadDelay)
 import System.Directory (doesFileExist, removeFile)
 import System.Exit (exitSuccess)
-import Control.Concurrent (threadDelay)
 
 #ifndef mingw32_HOST_OS
 import System.Posix.Signals (installHandler, sigINT, Handler(Catch))
