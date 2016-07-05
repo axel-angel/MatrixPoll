@@ -1,3 +1,3 @@
 [submodule "deps/yesod-auth-token"]
 	path = deps/yesod-auth-token
-	url = ssh://gitolite@redmine.gnugen.ch:2250/redmine/yesod-auth-token.git
+	url = ssh://git@gitlab-ssh.gnugen.ch:2200/gnugen/yesod-auth-token.git 
