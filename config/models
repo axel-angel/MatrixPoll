@@ -1,7 +1,7 @@
 User
     token Text
     nickname Text Maybe
-      UniqueToken token
+      UniqueUser token
       deriving Typeable
 
 Email

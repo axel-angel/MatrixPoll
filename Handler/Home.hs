@@ -1,20 +1,23 @@
-{-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Home where
 
 import Import
-import Data.Time.Clock (getCurrentTime, utctDay)
-import Data.Time.Calendar (Day)
-import Data.List (sort, group, transpose)
-import GHC.Exts (sortWith)
+import Yesod.Auth.Token (randomToken, tokenCreds, Token)
+import Handler.Common
+import Data.List (transpose, (!!))
 import Safe (atMay)
-import Control.Monad (join)
 import System.Random (randomRIO)
-import Data.Text (pack)
 
-
+-- This is a handler function for the GET request method on the HomeR
+-- resource pattern. All of your resource patterns are defined in
+-- config/routes
+--
+-- The majority of the code you will write in Yesod lives in these handler
+-- functions. You can spread them across multiple files if you are so
+-- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
     defaultLayout $(widgetFile "homepage")
+
 
 getMyPollsR :: Handler Html
 getMyPollsR = do
@@ -70,7 +73,9 @@ getSeePollR phash = do
         bests = map mostFrequent answers
         isRowMine p = maybe False (resultOwner p ==) mUserId
     (newRowForm, _) <- generateFormPost $ rowForm (Entity pid poll) Nothing
-    defaultLayout $(widgetFile "see_poll")
+    defaultLayout $ do
+        setTitle $ toHtml $ pollTitle poll
+        $(widgetFile "see_poll")
 
 
 postAjaxAddR :: PollId -> Handler TypedContent
@@ -125,7 +130,7 @@ getsertUser mNickname = do
          Nothing -> do
              token <- getYesod >>= liftIO . randomToken
              uid <- runDB . insert $ User token mNickname
-             setCreds False $ tokenCreds token
+             setCreds False $ tokenCreds token -- FIXME
              return (uid, token)
 
 
@@ -183,6 +188,7 @@ multiField = Field
     , fieldEnctype = UrlEncoded
     }
 
+
 getNow :: IO Day
 getNow = getCurrentTime >>= return . utctDay
 
@@ -192,9 +198,9 @@ mostFrequent = safeHead . reverse . sortWith (\(_,c) -> c) . countOccurences
     where safeHead (x:_) = Just x
           safeHead _ = Nothing
 
-
 countOccurences :: (Eq a, Ord a) => [a] -> [(a, Int)]
 countOccurences = map (\xs@(x:_) -> (x, length xs)) . group . sort
+
 
 fieldSettingsAttrs :: [(Text, Text)] -> FieldSettings site
 fieldSettingsAttrs attrs = (fieldSettingsLabel emptyLabel) { fsAttrs = attrs }

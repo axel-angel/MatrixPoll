@@ -1,0 +1,7 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[submodule "lib/yesod-auth-token"]
+	url = https://github.com/axel-angel/yesod-auth-token
